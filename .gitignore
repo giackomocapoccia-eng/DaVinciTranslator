@@ -1,0 +1,12 @@
+# Video files
+Video/*.mp4
+Video/*.mov
+Video/*.mkv
+Video/*.avi
+
+# Generated outputs
+Output/
+Temp/
+
+# AI models (if downloaded locally)
+Models/
