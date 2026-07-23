@@ -1,5 +1,7 @@
 from pathlib import Path
+
 from Modules.audio import extract_audio
+from Modules.transcribe import transcribe_audio
 
 VIDEO_FOLDER = Path("Video")
 OUTPUT_FOLDER = Path("Output")
@@ -29,3 +31,12 @@ video = video_files[0]
 print(f"🎬 Video trovato: {video.name}")
 
 audio = extract_audio(video, OUTPUT_FOLDER)
+
+# Trascrizione con Whisper
+result = transcribe_audio(audio)
+
+print("\n==============================")
+print("TESTO TRASCRITTO")
+print("==============================\n")
+
+print(result["text"])

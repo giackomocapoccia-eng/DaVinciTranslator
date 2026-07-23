@@ -2,9 +2,19 @@ import subprocess
 from pathlib import Path
 
 
-def extract_audio(video_path, output_folder):
-    output_folder = Path(output_folder)
-    output_folder.mkdir(exist_ok=True)
+def extract_audio(video_path: Path, output_folder: Path) -> Path:
+    """
+    Extracts audio from a video using FFmpeg.
+
+    Args:
+        video_path: Path to the input video.
+        output_folder: Folder where the WAV file will be saved.
+
+    Returns:
+        Path to the generated audio.wav file.
+    """
+
+    output_folder.mkdir(parents=True, exist_ok=True)
 
     audio_path = output_folder / "audio.wav"
 
@@ -20,14 +30,18 @@ def extract_audio(video_path, output_folder):
         "16000",
         "-ac",
         "1",
-        str(audio_path)
+        str(audio_path),
     ]
 
-    print("🎵 Estrazione audio...")
+    print("🎵 Extracting audio...")
 
-    subprocess.run(command, check=True)
+    try:
+        subprocess.run(command, check=True)
 
-    print("✅ Audio creato:")
-    print(audio_path)
+    except subprocess.CalledProcessError:
+        print("❌ FFmpeg failed.")
+        raise
+
+    print(f"✅ Audio created: {audio_path}")
 
     return audio_path
