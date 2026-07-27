@@ -20,7 +20,10 @@ def transcribe_audio(audio_path: Path, model_name: str = "base") -> dict:
 
     print("🎤 Transcribing audio...")
 
-    result = model.transcribe(str(audio_path))
+    result = model.transcribe(
+    str(audio_path),
+    word_timestamps=True
+    )
 
     print("✅ Transcription completed.")
 
