@@ -3,6 +3,7 @@ from pathlib import Path
 from Modules.audio import extract_audio
 from Modules.transcribe import transcribe_audio
 from Modules.subtitles import build_subtitles, save_srt
+from Modules.translate import translate_srt
 
 VIDEO_FOLDER = Path("Video")
 OUTPUT_FOLDER = Path("Output")
@@ -55,5 +56,9 @@ subtitles = build_subtitles(result)
 output_srt = OUTPUT_FOLDER / "DaVinciResolve_EN.srt"
 
 save_srt(subtitles, output_srt)
+
+output_it = OUTPUT_FOLDER / "DaVinciResolve_IT.srt"
+
+translate_srt(output_srt, output_it, source="en", target="it")
 
 print("\n✅ Processo completato!")
