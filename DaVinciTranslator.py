@@ -8,57 +8,70 @@ from Modules.translate import translate_srt
 VIDEO_FOLDER = Path("Video")
 OUTPUT_FOLDER = Path("Output")
 
-SUPPORTED_FORMATS = ["*.mp4", "*.mov", "*.mkv", "*.avi"]
+SUPPORTED_FORMATS = (
+    "*.mp4",
+    "*.mov",
+    "*.mkv",
+    "*.avi",
+)
 
 
-print("=" * 50)
-print(" DaVinciTranslator v1.0")
-print("=" * 50)
+def main():
 
+    print("=" * 50)
+    print(" DaVinciTranslator v1.0")
+    print("=" * 50)
 
-VIDEO_FOLDER.mkdir(exist_ok=True)
-OUTPUT_FOLDER.mkdir(exist_ok=True)
+    VIDEO_FOLDER.mkdir(exist_ok=True)
+    OUTPUT_FOLDER.mkdir(exist_ok=True)
 
+    video_files = []
 
-video_files = []
+    for pattern in SUPPORTED_FORMATS:
+        video_files.extend(VIDEO_FOLDER.glob(pattern))
 
-for pattern in SUPPORTED_FORMATS:
-    video_files.extend(VIDEO_FOLDER.glob(pattern))
+    if not video_files:
+        print("❌ Nessun video trovato nella cartella Video")
+        input("Premi INVIO per chiudere...")
+        return
 
+    print(f"✅ Trovati {len(video_files)} video:")
 
-if not video_files:
-    print("❌ Nessun video trovato nella cartella Video")
-    input("Premi INVIO per chiudere...")
-    exit()
+    for i, video in enumerate(video_files, start=1):
+        print(f"{i}. {video.name}")
 
+    while True:
+        try:
+            choice = int(input("\nSeleziona il video: ")) - 1
 
-print(f"✅ Trovati {len(video_files)} video:")
+            if 0 <= choice < len(video_files):
+                break
 
-for i, video in enumerate(video_files, start=1):
-    print(f"{i}. {video.name}")
+            print("❌ Numero non valido.")
 
+        except ValueError:
+            print("❌ Inserisci un numero.")
 
-choice = int(input("\nSeleziona il video: ")) - 1
+    video_path = video_files[choice]
 
-video_path = video_files[choice]
+    print("\n🎬 Video selezionato:")
+    print(video_path.name)
 
+    audio = extract_audio(video_path, OUTPUT_FOLDER)
 
-print("\n🎬 Video selezionato:")
-print(video_path.name)
+    result = transcribe_audio(audio)
 
+    subtitles = build_subtitles(result)
 
-audio = extract_audio(video_path, OUTPUT_FOLDER)
+    output_srt = OUTPUT_FOLDER / "DaVinciResolve_EN.srt"
 
-result = transcribe_audio(audio)
+    save_srt(subtitles, output_srt)
 
-subtitles = build_subtitles(result)
+    output_it = OUTPUT_FOLDER / "DaVinciResolve_IT.srt"
 
-output_srt = OUTPUT_FOLDER / "DaVinciResolve_EN.srt"
+    translate_srt(output_srt, output_it)
 
-save_srt(subtitles, output_srt)
+    print("\n✅ Processo completato!")
 
-output_it = OUTPUT_FOLDER / "DaVinciResolve_IT.srt"
-
-translate_srt(output_srt, output_it, source="en", target="it")
-
-print("\n✅ Processo completato!")
+    if __name__ == "__main__":
+        main()

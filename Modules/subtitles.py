@@ -1,7 +1,7 @@
 from pathlib import Path
 from dataclasses import dataclass
 
-MAX_LINE_LENGTH = 42
+MAX_LINE_LENGTH = 38
 MAX_LINES = 2
 MIN_DURATION = 1.0
 MAX_DURATION = 6.0
@@ -73,7 +73,7 @@ def build_subtitles(result: dict) -> list[Subtitle]:
 
         for word_data in words:
 
-            word = word_data["word"].strip()
+            word = word_data["word"].strip().replace("\n", " ")
 
             if not word:
                 continue
@@ -95,6 +95,9 @@ def build_subtitles(result: dict) -> list[Subtitle]:
             )
 
             if should_close:
+
+                if duration < MIN_DURATION:
+                    continue
 
                 subtitles.append(
                     Subtitle(
@@ -128,21 +131,34 @@ def build_subtitles(result: dict) -> list[Subtitle]:
 
 def split_text(text: str) -> str:
     """
-    Split subtitle text into at most two balanced lines.
+    Split subtitle text into two balanced lines.
     """
+
+    if len(text) <= MAX_LINE_LENGTH:
+        return text
 
     words = text.split()
 
-    if len(words) <= 6:
-        return text
+    best_split = 0
+    smallest_difference = float("inf")
 
-    middle = len(words) // 2
+    for i in range(1, len(words)):
 
-    line1 = " ".join(words[:middle])
-    line2 = " ".join(words[middle:])
+        line1 = " ".join(words[:i])
+        line2 = " ".join(words[i:])
 
-    if len(line1) <= MAX_LINE_LENGTH and len(line2) <= MAX_LINE_LENGTH:
-        return f"{line1}\n{line2}"
+        difference = abs(len(line1) - len(line2))
+
+        if (
+            len(line1) <= MAX_LINE_LENGTH
+            and len(line2) <= MAX_LINE_LENGTH
+            and difference < smallest_difference
+        ):
+            smallest_difference = difference
+            best_split = i
+
+    if best_split:
+        return " ".join(words[:best_split]) + "\n" + " ".join(words[best_split:])
 
     return text
 

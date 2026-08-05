@@ -38,16 +38,12 @@ def translate_srt(input_file: Path, output_file: Path, source="en", target="it")
 
             text = lines[i + 2].strip()
 
-            print(f"Traduzione: {text}")
-
             try:
                 translated_text = translator.translate(text)
 
             except Exception:
                 print(f"⚠ Errore nella traduzione: {text}")
                 translated_text = text
-
-            print(f"OK -> {translated_text}")
 
             translated.append(number)
 

@@ -13,6 +13,8 @@ def transcribe_audio(audio_path: Path, model_name: str = "base") -> dict:
     Returns:
         Whisper transcription result.
     """
+    if not audio_path.exists():
+        raise FileNotFoundError(f"Audio file not found: {audio_path}")
 
     print(f"🧠 Loading Whisper model: {model_name}")
 
@@ -21,8 +23,8 @@ def transcribe_audio(audio_path: Path, model_name: str = "base") -> dict:
     print("🎤 Transcribing audio...")
 
     result = model.transcribe(
-    str(audio_path),
-    word_timestamps=True
+        str(audio_path),
+        word_timestamps=True,
     )
 
     print("✅ Transcription completed.")
