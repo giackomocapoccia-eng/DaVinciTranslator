@@ -73,5 +73,6 @@ def main():
 
     print("\n✅ Processo completato!")
 
-    if __name__ == "__main__":
-        main()
+
+if __name__ == "__main__":
+    main()
