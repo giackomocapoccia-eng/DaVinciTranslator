@@ -19,7 +19,7 @@ SUPPORTED_FORMATS = (
 def main():
 
     print("=" * 50)
-    print(" DaVinciTranslator v1.0")
+    print(" DaVinciTranslator - Development Version")
     print("=" * 50)
 
     VIDEO_FOLDER.mkdir(exist_ok=True)
