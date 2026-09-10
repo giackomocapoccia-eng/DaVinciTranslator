@@ -63,11 +63,13 @@ def main():
 
     subtitles = build_subtitles(result)
 
-    output_srt = OUTPUT_FOLDER / "DaVinciResolve_EN.srt"
+    video_name = video_path.stem
+
+    output_srt = OUTPUT_FOLDER / f"{video_name}_EN.srt"
 
     save_srt(subtitles, output_srt)
 
-    output_it = OUTPUT_FOLDER / "DaVinciResolve_IT.srt"
+    output_it = OUTPUT_FOLDER / f"{video_name}_IT.srt"
 
     translate_srt(output_srt, output_it)
 
