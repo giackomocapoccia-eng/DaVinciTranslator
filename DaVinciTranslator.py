@@ -16,25 +16,24 @@ SUPPORTED_FORMATS = (
 )
 
 
-def main():
-
-    print("=" * 50)
-    print(" DaVinciTranslator - Development Version")
-    print("=" * 50)
-
-    VIDEO_FOLDER.mkdir(exist_ok=True)
-    OUTPUT_FOLDER.mkdir(exist_ok=True)
-
+def find_videos() -> list[Path]:
+    """
+    Cerca tutti i video supportati nella cartella Video.
+    """
     video_files = []
 
     for pattern in SUPPORTED_FORMATS:
         video_files.extend(VIDEO_FOLDER.glob(pattern))
 
-    if not video_files:
-        print("❌ Nessun video trovato nella cartella Video")
-        input("Premi INVIO per chiudere...")
-        return
+    video_files.sort()
 
+    return video_files
+
+
+def select_video(video_files: list[Path]) -> Path:
+    """
+    Mostra la lista dei video e restituisce quello scelto.
+    """
     print(f"✅ Trovati {len(video_files)} video:")
 
     for i, video in enumerate(video_files, start=1):
@@ -45,14 +44,33 @@ def main():
             choice = int(input("\nSeleziona il video: ")) - 1
 
             if 0 <= choice < len(video_files):
-                break
+                return video_files[choice]
 
             print("❌ Numero non valido.")
 
         except ValueError:
             print("❌ Inserisci un numero.")
 
-    video_path = video_files[choice]
+
+def main():
+    """
+    Punto di ingresso del programma.
+    """
+    print("=" * 50)
+    print(" DaVinciTranslator - Development Version")
+    print("=" * 50)
+
+    VIDEO_FOLDER.mkdir(exist_ok=True)
+    OUTPUT_FOLDER.mkdir(exist_ok=True)
+
+    video_files = find_videos()
+
+    if not video_files:
+        print("❌ Nessun video trovato nella cartella Video")
+        input("Premi INVIO per chiudere...")
+        return
+
+    video_path = select_video(video_files)
 
     print("\n🎬 Video selezionato:")
     print(video_path.name)
