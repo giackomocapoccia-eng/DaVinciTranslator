@@ -1,15 +1,15 @@
 # DaVinciTranslator
 
-**AI-powered subtitle generation and translation tool built with Python, FFmpeg and Whisper.**
+**Automated subtitle processing pipeline built with Python, FFmpeg, Whisper and machine translation.**
 
-DaVinciTranslator is a Python project designed to automate the creation of English and Italian subtitles from video files, with a particular focus on DaVinci Resolve training content.
+DaVinciTranslator is a Python application that automates the creation and translation of subtitles from English-language video content.
 
-The application extracts audio from a video, transcribes speech using Whisper, generates synchronized SRT subtitles, translates them into Italian and applies terminology corrections for DaVinci Resolve.
+The pipeline extracts audio with FFmpeg, transcribes speech using OpenAI Whisper with word-level timestamps, generates synchronized SRT subtitles, translates them into Italian and applies custom terminology corrections for DaVinci Resolve.
 
-> 🚧 **Project Status:** Work in Progress
-> The core processing pipeline is functional. Subtitle segmentation, translation distribution and readability are currently being improved.
+The project focuses on practical software-development challenges including automation, modular architecture, file processing, text-processing algorithms, synchronization and error handling.
 
----
+> 🚧 **Project Status:** Active development  
+> The core processing pipeline is functional. Current work focuses on improving subtitle segmentation, translation distribution and readability.
 
 ## Features
 
@@ -131,13 +131,12 @@ ffmpeg -version
 
 ## Usage
 
-Place the video you want to process inside the project's video input folder.
+Place the video you want to process inside the `Video/` folder.
 
 Then run:
 
 ```bash
 python DaVinciTranslator.py
-```
 
 The application detects supported video files and allows the user to select the video to process.
 
